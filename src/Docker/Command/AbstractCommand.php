@@ -159,7 +159,6 @@ abstract class AbstractCommand {
         // REQUEST CREATION
         $request = $this->_createRequest($docker,$apiVersion);
 
-
         // BEFORE SEND
         try{
             $beforeSend = $this->beforeSend($request);
@@ -174,7 +173,11 @@ abstract class AbstractCommand {
 
 
         // SEND THE REQUEST
-        $response = $docker->getHttpClient()->send($request);
+        try{
+            $response = $docker->getHttpClient()->send($request);
+        }catch (ClientException $e){
+            throw new ResponseNotValidException("Response is not valid : " . $e->getMessage());
+        }
 
 
         // STATUS CODE CHECKING
@@ -200,6 +203,38 @@ abstract class AbstractCommand {
 
 
         return new CommandOutput($request,$response,$afterSend);
+
+    }
+
+    /**
+     * Get a trace of the request and does not send it
+     * @param Docker $docker
+     * @param null $apiVersion
+     * @return string
+     */
+    public function debug(Docker $docker,$apiVersion = null){
+
+        $return = "";
+
+        // REQUEST CREATION
+        $request = $this->_createRequest($docker,$apiVersion);
+
+
+        try{
+            // BEFORE SEND
+            $beforeSend = $this->beforeSend($request);
+
+            if(false === $beforeSend){
+                $return .= "Request creation was canceled. But here are the params : " . PHP_EOL . PHP_EOL;
+            }
+
+            $request .= $request->__toString();
+
+        }catch (\Exception $e){
+            $return .= "Request creation was canceled. Reason : " . $e->getMessage() . PHP_EOL;
+        }
+
+        return $return;
 
     }
 

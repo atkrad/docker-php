@@ -38,13 +38,26 @@ class Docker
      */
     private $imageManager;
 
+    protected $apiVersion;
+
     /**
      * @param HttpClient $httpClient Http client to use with Docker
      */
-    public function __construct(HttpClient $httpClient = null)
+    public function __construct(HttpClient $httpClient = null,$apiVersion = null)
     {
         $this->httpClient = $httpClient ?: new DockerClient();
+        $this->apiVersion = $apiVersion;
     }
+
+    /**
+     * @return null
+     */
+    public function getApiVersion()
+    {
+        return $this->apiVersion;
+    }
+
+
 
     /**
      * @return \GuzzleHttp\Client
