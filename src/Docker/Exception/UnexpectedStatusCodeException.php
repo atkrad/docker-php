@@ -9,7 +9,7 @@ use GuzzleHttp\Message\Response;
 /**
  * Docker\Exception\UnexpectedStatusCodeException
  */
-class UnexpectedStatusCodeException extends BaseException
+class UnexpectedStatusCodeException extends ResponseNotValidException
 {
     /**
      * @param integer $statusCode

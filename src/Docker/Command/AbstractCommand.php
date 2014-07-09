@@ -175,7 +175,7 @@ abstract class AbstractCommand {
         // SEND THE REQUEST
         try{
             $response = $docker->getHttpClient()->send($request);
-        }catch (ClientException $e){
+        }catch (\Exception $e){
             throw new ResponseNotValidException("Response is not valid : " . $e->getMessage());
         }
 
