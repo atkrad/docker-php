@@ -96,13 +96,18 @@ abstract class AbstractCommand {
      */
     protected function _buildUrl(Docker  $docker, $apiVersion){
 
-        if($apiVersion{0} !== "v"){
-            $apiVersion = "v$apiVersion";
+        if($apiVersion){
+            if($apiVersion{0} !== "v"){
+                $apiVersion = "v$apiVersion";
+            }
+
+            $path = ltrim($this->path,"/");
+
+            $url = "/$apiVersion/$path";
+        }else{
+
+            $url = "/" . ltrim($this->path,"/");
         }
-
-        $path = ltrim($this->path,"/");
-
-        $url = "/$apiVersion/$path";
 
         return $url;
     }
