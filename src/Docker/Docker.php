@@ -73,7 +73,7 @@ class Docker
     public function getContainerManager()
     {
         if (null === $this->containerManager) {
-            $this->containerManager = new ContainerManager($this->httpClient);
+            $this->containerManager = new ContainerManager($this);
         }
 
         return $this->containerManager;
