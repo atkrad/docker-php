@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bob
- * Date: 7/9/14
- * Time: 7:57 AM
- */
 
 namespace Docker\Command;
 

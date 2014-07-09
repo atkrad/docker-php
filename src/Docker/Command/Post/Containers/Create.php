@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bob
- * Date: 7/9/14
- * Time: 5:53 AM
- */
 
-namespace Docker\Command\Containers;
+namespace Docker\Command\Post\Containers;
 
 
 use Docker\Command\AbstractCommand;

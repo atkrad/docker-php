@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bob
- * Date: 7/9/14
- * Time: 5:54 AM
- */
 
 namespace Docker\Command;
 
 
-use Docker\Command\Exception\RequestCanceledException;
-use Docker\Command\Exception\ResponseNotValidException;
+use Docker\Exception\RequestCanceledException;
+use Docker\Exception\ResponseNotValidException;
 use Docker\Docker;
 use Docker\Exception\UnexpectedStatusCodeException;
 use GuzzleHttp\Message\RequestInterface;
@@ -29,8 +23,6 @@ abstract class AbstractCommand {
     // params that must be overriden by child class
 
     protected $path;
-    protected $minVersion = null;
-    protected $maxVersion = null;
     protected $method = self::METHOD_GET;
 
     // params that should be overriden by child class
@@ -39,6 +31,8 @@ abstract class AbstractCommand {
      * @var null|array|string if array then it is an array of status code, if string it's a single status code ,if null then nothing is done
      */
     protected $expectedStatusCode = null;
+    protected $minVersion = null;
+    protected $maxVersion = null;
 
 
 
@@ -151,8 +145,8 @@ abstract class AbstractCommand {
      * @param Docker $docker
      * @param null $apiVersion
      * @return CommandOutput
-     * @throws Exception\RequestCanceledException when request is canceled
-     * @throws Exception\ResponseNotValidException general not valid response (includes UnexpectedStatusCodeException)
+     * @throws RequestCanceledException when request is canceled
+     * @throws ResponseNotValidException general not valid response (includes UnexpectedStatusCodeException)
      * @throws \Docker\Exception\UnexpectedStatusCodeException when status code does not match the expected one
      */
     public function run(Docker $docker,$apiVersion = null){

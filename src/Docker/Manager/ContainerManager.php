@@ -124,7 +124,7 @@ class ContainerManager
     public function create(Container $container)
     {
 
-        $create = new \Docker\Command\Containers\Create($container);
+        $create = new \Docker\Command\Post\Containers\Create($container);
         $create->run($this->docker);
 
         return $this;
