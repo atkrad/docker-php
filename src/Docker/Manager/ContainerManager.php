@@ -18,14 +18,21 @@ class ContainerManager
     /**
      * @var \Docker\Http\Client
      */
-    private $docker;
+    private $client;
 
     /**
-     * @param \Docker\Http\Client
+     * @var \Docker\Docker
+     */
+    private $docker;
+
+
+    /**
+     * @param \Docker\Docker
      */
     public function __construct(Docker $docker)
     {
         $this->docker = $docker;
+        $this->client = $docker->getHttpClient();
     }
 
     /**
