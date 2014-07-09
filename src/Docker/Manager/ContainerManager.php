@@ -3,6 +3,7 @@
 namespace Docker\Manager;
 
 use Docker\Container;
+use Docker\Docker;
 use Docker\Json;
 use Docker\Exception\UnexpectedStatusCodeException;
 use Docker\Exception\ContainerNotFoundException;
@@ -17,14 +18,14 @@ class ContainerManager
     /**
      * @var \Docker\Http\Client
      */
-    private $client;
+    private $docker;
 
     /**
      * @param \Docker\Http\Client
      */
-    public function __construct(HttpClient $client)
+    public function __construct(Docker $docker)
     {
-        $this->client = $client;
+        $this->docker = $docker;
     }
 
     /**
@@ -122,21 +123,9 @@ class ContainerManager
      */
     public function create(Container $container)
     {
-        $response = $this->client->post(['/containers/create{?data*}', [
-            'data' => [
-                'name' => $container->getName(),
-            ],
-        ]],
-        array(
-            'body'         => Json::encode($container->getConfig()),
-            'headers'      => array('content-type' => 'application/json')
-        ));
 
-        if ($response->getStatusCode() !== "201") {
-            throw UnexpectedStatusCodeException::fromResponse($response);
-        }
-
-        $container->setId($response->json()['Id']);
+        $create = new \Docker\Command\Containers\Create($container);
+        $create->run($this->docker);
 
         return $this;
     }
@@ -304,10 +293,12 @@ class ContainerManager
      */
     public function remove(Container $container, $volumes = false)
     {
-        $response = $this->client->delete(['/containers/{id}?v={volumes}', [
+        $request = $this->client->delete(['/containers/{id}?v={volumes}', [
             'id' => $container->getId(),
             'v' => $volumes
         ]]);
+
+        $response = $this->client->send($request);
 
         if ($response->getStatusCode() !== "204") {
             throw UnexpectedStatusCodeException::fromResponse($response);
